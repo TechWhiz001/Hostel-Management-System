@@ -270,7 +270,7 @@ int main()
             cin >> user;
             cout << "\t\t\t\t\t\t Enter the password : ";
             cin >> pwd;
-            if (user == "1" && pwd == "1")
+            if (user == "Admin" && pwd == "123")
             {
                 loggedInUserType = 1;
             }
