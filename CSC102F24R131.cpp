@@ -24,7 +24,7 @@ void deleteRecord(string AddSTname[], string AddStFatherName[], int AddSTMarks[]
 void updateRecord(string AddSTname[], string AddStFatherName[], int AddSTMarks[], string AddSTCNIC[], string AddSTphoneNo[], int assignRoom[], bool roomflag[], bool addFlag[], int addCounter, int editRecord, int Rcounter, int &usersize);
 void RoomAssign(int assignRoom[], bool addFlag[], bool roomflag[], bool apFlag[], int addCounter, int &Rcounter, int &apCounter, int &usersize);
 //-------------Accounts ---->Fumctions--------------
-void CreatAccount(string username[], string password[], bool uflag[], int &uCounter, int addCounter, int &usersize);
+void CreatAccount(string username[], string password[],int assignRoom[], bool uflag[], int &uCounter, int addCounter, int &usersize,int Rcounter,int UpdateAccount);
 void deleteAccount(string username[], string password[], int assignRoom[], bool roomflag[], bool uflag[], bool addFlag[], int &usersize, int removeAccount, int &uCounter, int addCounter, int Rcounter);
 void updateAccount(string username[], string password[], int assignRoom[], bool uflag[], bool roomflag[], int UpdateAccount, int &uCounter, int addCounter, int &usersize, int Rcounter);
 //--------------Lists ----->Functions-------------
@@ -205,6 +205,7 @@ int main()
     int hostelFee = 0; // hostel fee
     int extraCharges = 0;
     bool roomFound = false; // temporary flag for finding room
+    bool ispresent = true;
 
     cout.unsetf(ios::left);
     cout.unsetf(ios::right);
@@ -306,15 +307,17 @@ int main()
                     if (uflag[k] == true)
                     {
                         loggedInUserType = 3;
+                                            ispresent = false;
+
                         break;
                     }
                 }
-                else
+                
+            }
+            if(ispresent)
                 {
                     loggedInUserType = -20;
-                    break;
                 }
-            }
             break;
 
         case 0:
@@ -499,7 +502,7 @@ int main()
                             cout << endl;
                             // --------------Function call for Creating accounts -----------
 
-                            CreatAccount(username, password, uflag, uCounter, addCounter, usersize);
+                            CreatAccount(username, password,assignRoom, uflag, uCounter, addCounter, usersize,Rcounter,UpdateAccount);
 
                             break;
                         case 2:
@@ -900,6 +903,7 @@ int main()
     applylistDataRecord(ApplySTname, ApplyStFatherName, ApplySTMarks, ApplySTCNIC, ApplySTphoneNo, apFlag, apCounter, applysize);
     saveCurrentRecordList(assignRoom, AddSTname, AddStFatherName, AddSTMarks, AddSTCNIC, AddSTphoneNo, addFlag, HosteliteDues, addCounter, usersize);
     saveAccountsRecord(username, password, complain, cmpFlag, usersize, uCounter, uflag, cmpCounter);
+    return 0;
 }
 //------------------------------------ End of main function----------------------<
 
@@ -945,8 +949,8 @@ void admin1()
 
     cout << "\t\t\t\t\t\t\t\t" << left << setw(30) << " 1. Add Record" << endl;
     cout << "\t\t\t\t\t\t\t\t" << left << setw(30) << " 2. RoomaAssign " << endl;
-    cout << "\t\t\t\t\t\t\t\t" << left << setw(30) << " 3. Delete Record" << endl;
-    cout << "\t\t\t\t\t\t\t\t" << left << setw(30) << " 4. Update Record" << endl;
+    cout << "\t\t\t\t\t\t\t\t" << left << setw(30) << " 3. Update Record" << endl;
+    cout << "\t\t\t\t\t\t\t\t" << left << setw(30) << " 4. Delete Record" << endl;
     cout << "\t\t\t\t\t\t\t\t" << left << setw(30) << " 0.Exit" << endl;
 
     cout << "\t\t\t\t\t\t\t\t------------------------------------------------------------" << endl;
@@ -1804,7 +1808,7 @@ void deleteRecord(string AddSTname[], string AddStFatherName[], int AddSTMarks[]
 
 // --------------------This Function is defined for Creating account ....
 
-void CreatAccount(string username[], string password[], bool uflag[], int &uCounter, int addCounter, int &usersize)
+void CreatAccount(string username[], string password[],int assignRoom[], bool uflag[], int &uCounter, int addCounter, int &usersize,int Rcounter,int UpdateAccount)
 {
     bool isAccountCreate = false;
     if (addCounter == 0) // check creating account only added hostelite
@@ -1814,9 +1818,39 @@ void CreatAccount(string username[], string password[], bool uflag[], int &uCoun
     }
 
     cin.ignore();
+    cout << "\t\t\t\t\t\t\tEnter the Room number to create account: ";
+
+    while (true)
+    {
+
+        if (Rcounter > 0)
+        {
+
+            cin >> UpdateAccount;
+            if (cin.fail())
+            {
+                cin.clear();
+                cin.ignore(255, '\n');
+                cout << "\t\t\t\t\t\t\tInvalid Room no ##.kindly enter (1--100): ";
+            }
+            else if (UpdateAccount < 1 || UpdateAccount > usersize)
+            {
+                cout << "\t\t\t\t\t\t\tInvalid Room no ##.kindly enter (1--100): ";
+            }
+            else
+            {
+                break;
+            }
+        }
+        else
+        {
+            cout << "\t\t\t\t\t\t\tKindly assign the room  before create  Record!! " << endl;
+            return;
+        }
+    }
     for (int i = 0; i < usersize; i++)
     {
-        if (username[i] == "nv")
+        if (assignRoom[i] == UpdateAccount &&username[i] == "nv")
         {
             cout << "\t\t\t\t\t\t\tEnter username: ";
             cin >> username[i];
