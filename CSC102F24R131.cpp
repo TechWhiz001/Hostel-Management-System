@@ -1878,8 +1878,7 @@ void CreatAccount(string username[], string password[], int assignRoom[], bool u
             cin >> password[i];
             uflag[i] = true;
             isAccountCreate = true;
-            cout << username[i] << password[i] << endl;
-            ;
+            
 
             cout << "\t\t\t\t\t\t\tHostelite account created Successfully!....." << endl;
             Sleep(1000);
